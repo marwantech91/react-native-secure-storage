@@ -144,6 +144,16 @@ export class SecureStorage {
     }
   }
 
+  async getMultiple(keys: string[]): Promise<Record<string, string | null>> {
+    const results: Record<string, string | null> = {};
+    await Promise.all(
+      keys.map(async (key) => {
+        results[key] = await this.get(key);
+      })
+    );
+    return results;
+  }
+
   private mapError(error: Error): SecureStorageError {
     const message = error.message.toLowerCase();
 
