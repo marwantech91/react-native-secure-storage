@@ -144,6 +144,12 @@ export class SecureStorage {
     }
   }
 
+  async setMultiple(entries: Record<string, string>, options?: SetOptions): Promise<void> {
+    await Promise.all(
+      Object.entries(entries).map(([key, value]) => this.set(key, value, options))
+    );
+  }
+
   async getMultiple(keys: string[]): Promise<Record<string, string | null>> {
     const results: Record<string, string | null> = {};
     await Promise.all(
