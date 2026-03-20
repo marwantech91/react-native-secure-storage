@@ -61,6 +61,10 @@ export class SecureStorage {
   }
 
   async set(key: string, value: string, options?: SetOptions): Promise<void> {
+    if (!key || key.trim().length === 0) {
+      throw new SecureStorageError('Storage key cannot be empty', ErrorCode.KEYCHAIN_ERROR);
+    }
+
     const config = {
       service: this.service,
       accessible: options?.accessible || this.defaultAccessible,
