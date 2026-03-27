@@ -164,6 +164,21 @@ export class SecureStorage {
     return results;
   }
 
+  /** Deletes multiple keys in parallel and returns the count of keys removed. */
+  async deleteMultiple(keys: string[]): Promise<number> {
+    let removed = 0;
+    await Promise.all(
+      keys.map(async (key) => {
+        const existed = await this.has(key);
+        if (existed) {
+          await this.delete(key);
+          removed++;
+        }
+      })
+    );
+    return removed;
+  }
+
   private mapError(error: Error): SecureStorageError {
     const message = error.message.toLowerCase();
 
